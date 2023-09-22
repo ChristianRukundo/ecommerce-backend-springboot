@@ -2,7 +2,7 @@ package com.springboot.api.service.impl;
 
 import com.springboot.api.entity.Role;
 import com.springboot.api.entity.User;
-import com.springboot.api.exception.BlogAPIException;
+import com.springboot.api.exception.EcommerceAPIException;
 import com.springboot.api.payload.LoginDto;
 import com.springboot.api.payload.RegisterDto;
 import com.springboot.api.repository.RoleRepository;
@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -59,6 +60,17 @@ public class AuthServiceImpl implements AuthService {
     public String register(RegisterDto registerDto) {
         // Check for username and email existence
 
+       Optional<User> emailExists = userRepository.findByEmail(registerDto.getEmail());
+
+       if (emailExists.isPresent()){
+           throw new EcommerceAPIException(HttpStatus.FOUND,"The email is already registered");
+       }
+       Optional<User> usernameExists = userRepository.findByUsername(registerDto.getUsername());
+
+       if (usernameExists.isPresent()){
+           throw new EcommerceAPIException(HttpStatus.FOUND,"The username is already  taken");
+       }
+
         // Create a new user entity
         User user = new User();
         user.setName(registerDto.getName());
@@ -68,8 +80,8 @@ public class AuthServiceImpl implements AuthService {
 
         // Create a set of roles and add the "ROLE_USER" role
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new BlogAPIException(HttpStatus.NOT_FOUND, "Role not found"));
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new EcommerceAPIException(HttpStatus.NOT_FOUND, "Role not found"));
         roles.add(userRole);
 
         // Set the roles for the user
