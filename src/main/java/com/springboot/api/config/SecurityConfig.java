@@ -2,6 +2,7 @@ package com.springboot.api.config;
 
 import com.springboot.api.security.JwtAuthenticationEntryPoint;
 import com.springboot.api.security.JwtAuthenticationFilter;
+import com.springboot.api.utils.AppConstants;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
@@ -58,11 +59,10 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-
-                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**").permitAll()
+                        authorize
+                                .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
+                                .requestMatchers(AppConstants.USER_URLS).hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                                .requestMatchers(AppConstants.ADMIN_URLS).hasAuthority("ROLE_ADMIN")
                                 .anyRequest().authenticated()
 
                 ).exceptionHandling( exception -> exception

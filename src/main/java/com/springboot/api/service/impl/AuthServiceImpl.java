@@ -58,29 +58,17 @@ public class AuthServiceImpl implements AuthService {
    @Transactional
     @Override
     public String register(RegisterDto registerDto) {
-        // Check for username and email existence
-
-       Optional<User> emailExists = userRepository.findByEmail(registerDto.getEmail());
-
-       if (emailExists.isPresent()){
-           throw new EcommerceAPIException(HttpStatus.FOUND,"The email is already registered");
-       }
-       Optional<User> usernameExists = userRepository.findByUsername(registerDto.getUsername());
-
-       if (usernameExists.isPresent()){
-           throw new EcommerceAPIException(HttpStatus.FOUND,"The username is already  taken");
-       }
-
         // Create a new user entity
         User user = new User();
-        user.setName(registerDto.getName());
-        user.setUsername(registerDto.getUsername());
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
         user.setEmail(registerDto.getEmail());
+        user.setMobileNumber(registerDto.getMobileNumber());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         // Create a set of roles and add the "ROLE_USER" role
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName("ROLE_USER")
+        Role userRole = roleRepository.findByName("ROLE_ADMIN")
                 .orElseThrow(() -> new EcommerceAPIException(HttpStatus.NOT_FOUND, "Role not found"));
         roles.add(userRole);
 
