@@ -60,9 +60,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
-                                .requestMatchers(AppConstants.USER_URLS).hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-                                .requestMatchers(AppConstants.ADMIN_URLS).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
+                        .requestMatchers(AppConstants.USER_URLS).hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers(AppConstants.ADMIN_URLS).hasAuthority("ROLE_ADMIN")
                                 .anyRequest().authenticated()
 
                 ).exceptionHandling( exception -> exception

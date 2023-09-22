@@ -21,8 +21,6 @@ public class EcommerceRestApi {
 		SpringApplication.run(EcommerceRestApi.class, args);
 	}
 
-//	@PreAuthorize("hasRole('ADMIN')")
-@PreAuthorize("hasRole('ROLE_USER')")
 @GetMapping("api/v1/admin/test")
 	public String test () {
 		return  "Hello there I was testing";
