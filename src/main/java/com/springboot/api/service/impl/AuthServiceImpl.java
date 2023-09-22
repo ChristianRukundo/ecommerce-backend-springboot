@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Create a set of roles and add the "ROLE_USER" role
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName("ROLE_ADMIN")
+        Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new EcommerceAPIException(HttpStatus.NOT_FOUND, "Role not found"));
         roles.add(userRole);
 
