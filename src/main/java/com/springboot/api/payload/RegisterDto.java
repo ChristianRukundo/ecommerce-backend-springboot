@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDto {
+    private Long id;
     private String firstName;
     private String lastName;
     private String mobileNumber;
