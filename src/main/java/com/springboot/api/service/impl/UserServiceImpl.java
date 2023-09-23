@@ -2,6 +2,7 @@ package com.springboot.api.service.impl;
 
 import com.springboot.api.entity.User;
 import com.springboot.api.exception.EcommerceAPIException;
+import com.springboot.api.payload.AddressDTO;
 import com.springboot.api.payload.UserDTO;
 import com.springboot.api.payload.UserResponse;
 import com.springboot.api.repository.UserRepository;
@@ -39,6 +40,11 @@ public class UserServiceImpl implements UserService {
 
         List<UserDTO> userDTOS = users.stream().map(user -> {
             UserDTO dto = modelMapper.map(user, UserDTO.class);
+
+            if (!user.getAddresses().isEmpty()) {
+                dto.setAddress(modelMapper.map(user.getAddresses().stream().findFirst().get(), AddressDTO.class));
+            }
+
 
             return dto;
         }).toList();

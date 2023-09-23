@@ -3,6 +3,7 @@ package com.springboot.api.controller;
 import com.springboot.api.payload.JWTAuthResponse;
 import com.springboot.api.payload.LoginDto;
 import com.springboot.api.payload.RegisterDto;
+import com.springboot.api.payload.UserDTO;
 import com.springboot.api.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,9 @@ public class AuthController {
 
     // Build Register REST API
     @PostMapping(value = {"/register", "/signup"})
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
+    public ResponseEntity<String> register(@RequestBody UserDTO userDTO){
 
-        String response = authService.register(registerDto);
+        String response = authService.register(userDTO);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

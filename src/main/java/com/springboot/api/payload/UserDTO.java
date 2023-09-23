@@ -4,7 +4,6 @@ import com.springboot.api.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,5 +19,7 @@ public class UserDTO {
     private String password;
 
     private Set<Role> roles = new HashSet<>();
+
+    private AddressDTO address;
 
 }
