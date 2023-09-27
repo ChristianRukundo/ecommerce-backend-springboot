@@ -27,6 +27,7 @@ public class UserController {
             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR, required = false) String sortOrder
     ){
             UserResponse userResponse = userService.getUsers(pageNumber, pageSize, sortBy, sortOrder);
+        
 
             return  new ResponseEntity<UserResponse>(userResponse, HttpStatus.OK);
     }
