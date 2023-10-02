@@ -10,9 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
 import java.util.List;
-
+import java.util.Optional;
 
 @SpringBootApplication
 public class EcommerceRestApi implements CommandLineRunner {
@@ -20,7 +19,7 @@ public class EcommerceRestApi implements CommandLineRunner {
 	private RoleRepository roleRepository;
 
 	@Bean
-	public ModelMapper modelMapper(){
+	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 
@@ -28,28 +27,28 @@ public class EcommerceRestApi implements CommandLineRunner {
 		SpringApplication.run(EcommerceRestApi.class, args);
 	}
 
-
-
-   @Override
+	@Override
 	public void run(String... args) throws Exception {
 		try {
-			Role adminRole = new Role();
-			adminRole.setId(AppConstants.ADMIN_ID);
-			adminRole.setName("ROLE_ADMIN");
+			// Check if admin role exists
+			Optional<Role> adminRoleOptional = roleRepository.findByName("ROLE_ADMIN");
+			if (adminRoleOptional.isEmpty()) {
+				Role adminRole = new Role();
+				adminRole.setId(AppConstants.ADMIN_ID);
+				adminRole.setName("ROLE_ADMIN");
+				roleRepository.save(adminRole);
+			}
 
-			Role userRole = new Role();
-			userRole.setId(AppConstants.USER_ID);
-			userRole.setName("ROLE_USER");
-
-			List<Role> roles = List.of(adminRole, userRole);
-
-			List<Role> savedRoles = roleRepository.saveAll(roles);
-
-			savedRoles.forEach(System.out::println);
-
+			// Check if user role exists
+			Optional<Role> userRoleOptional = roleRepository.findByName("ROLE_USER");
+			if (userRoleOptional.isEmpty()) {
+				Role userRole = new Role();
+				userRole.setId(AppConstants.USER_ID);
+				userRole.setName("ROLE_USER");
+				roleRepository.save(userRole);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

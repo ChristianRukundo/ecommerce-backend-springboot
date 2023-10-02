@@ -2,6 +2,7 @@ package com.springboot.api.service.impl;
 
 import com.springboot.api.entity.User;
 import com.springboot.api.exception.EcommerceAPIException;
+import com.springboot.api.exception.ResourceNotFoundException;
 import com.springboot.api.payload.AddressDTO;
 import com.springboot.api.payload.UserDTO;
 import com.springboot.api.payload.UserResponse;
@@ -60,4 +61,16 @@ public class UserServiceImpl implements UserService {
 
         return userResponse;
         }
+
+    @Override
+    public UserDTO getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
+
+       UserDTO userDTO =  modelMapper.map(user, UserDTO.class);
+
+       userDTO.setAddress(modelMapper.map(user.getAddresses().stream().findFirst().get(), AddressDTO.class));
+
+       return userDTO;
+    }
 }

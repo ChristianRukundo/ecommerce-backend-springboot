@@ -5,6 +5,7 @@ import com.springboot.api.payload.LoginDto;
 import com.springboot.api.payload.RegisterDto;
 import com.springboot.api.payload.UserDTO;
 import com.springboot.api.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
