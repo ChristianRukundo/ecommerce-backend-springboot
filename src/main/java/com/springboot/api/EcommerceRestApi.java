@@ -1,16 +1,23 @@
 package com.springboot.api;
 
+import com.springboot.api.entity.Role;
+import com.springboot.api.repository.RoleRepository;
+import com.springboot.api.utils.AppConstants;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+
+import java.util.List;
+
+
 @SpringBootApplication
-public class EcommerceRestApi {
+public class EcommerceRestApi implements CommandLineRunner {
+	@Autowired
+	private RoleRepository roleRepository;
 
 	@Bean
 	public ModelMapper modelMapper(){
@@ -21,9 +28,28 @@ public class EcommerceRestApi {
 		SpringApplication.run(EcommerceRestApi.class, args);
 	}
 
-@GetMapping("api/v1/admin/test")
-	public String test () {
-		return  "Hello there I was testing";
+
+
+   @Override
+	public void run(String... args) throws Exception {
+		try {
+			Role adminRole = new Role();
+			adminRole.setId(AppConstants.ADMIN_ID);
+			adminRole.setName("ROLE_ADMIN");
+
+			Role userRole = new Role();
+			userRole.setId(AppConstants.USER_ID);
+			userRole.setName("ROLE_USER");
+
+			List<Role> roles = List.of(adminRole, userRole);
+
+			List<Role> savedRoles = roleRepository.saveAll(roles);
+
+			savedRoles.forEach(System.out::println);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
