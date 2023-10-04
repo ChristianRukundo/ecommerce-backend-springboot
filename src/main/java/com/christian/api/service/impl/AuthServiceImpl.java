@@ -1,7 +1,9 @@
 package com.christian.api.service.impl;
 
+import com.christian.api.entity.Cart;
 import com.christian.api.exception.EcommerceAPIException;
 import com.christian.api.repository.AddressRepository;
+import com.christian.api.repository.CartRepository;
 import com.christian.api.repository.RoleRepository;
 import com.christian.api.repository.UserRepository;
 import com.christian.api.security.JwtTokenProvider;
@@ -12,6 +14,7 @@ import com.christian.api.payload.LoginDto;
 import com.christian.api.payload.UserDTO;
 import com.christian.api.service.AuthService;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,29 +29,20 @@ import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
     private AddressRepository addressRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
-
-
-    public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder,
-                           AddressRepository addressRepository,
-                           JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.addressRepository = addressRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     public String login(LoginDto loginDto) {
@@ -72,6 +66,8 @@ public class AuthServiceImpl implements AuthService {
         user.setMobileNumber(userDTO.getMobileNumber());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
+       Cart cart = new Cart();
+       user.setCart(cart);
         // Create a set of roles and add the "ROLE_USER" role
         Set<Role> roles = new HashSet<>();
         Role userRole = roleRepository.findByName("ROLE_USER")
@@ -97,8 +93,8 @@ public class AuthServiceImpl implements AuthService {
 
        user.setAddresses(List.of(address));
 
-        // Save the user, which will update the user_roles table
-        userRepository.save(user);
+       User registeredUser = userRepository.save(user);
+       cart.setUser(registeredUser);
 
         return "User registered successfully!";
     }

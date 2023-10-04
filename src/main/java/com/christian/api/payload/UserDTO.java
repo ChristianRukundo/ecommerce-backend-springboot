@@ -1,5 +1,6 @@
 package com.christian.api.payload;
 
+import com.christian.api.entity.Cart;
 import com.christian.api.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,7 @@ public class UserDTO {
     private Set<Role> roles = new HashSet<>();
 
     private AddressDTO address;
+    private CartDTO cart;
+
 
 }
