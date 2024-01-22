@@ -10,6 +10,6 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
 
-    Cart findCartByEmailAndCartId(String email, Long cartId);
-    List<Cart> findCartsByProductId(Long productId);
+//    Cart findCartByEmailAndCartId(String email, Long cartId);
+//    List<Cart> findCartsByProductId(Long productId);
 }
